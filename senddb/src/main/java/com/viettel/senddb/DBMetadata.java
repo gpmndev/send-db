@@ -3,11 +3,11 @@ package com.viettel.senddb;
 import java.util.Date;
 
 public class DBMetadata {
-    private String fileName;
-    private String appName;
-    private String userId;
-    private String shopId;
-    private String roleId;
+    private final String fileName;
+    private final String appName;
+    private final String userId;
+    private final String shopId;
+    private final String roleId;
 
     public DBMetadata(String fileName, String appName, String userId, String shopId, String roleId) {
         if (fileName == null || fileName.isEmpty()) {

@@ -46,6 +46,11 @@ public class SendDBFileByGmail implements SendDBFile {
         }
         try {
             context.startActivity(emailIntent);
+            if (callback != null) {
+                String notifyString = context.getString(R.string.PRE_SEND_DB_BY_GMAIL);
+                final boolean NO_BLOCK_CAUSE_BY_OPEN_MAIL_ACTIVITY = false;
+                callback.onPreSend(notifyString, NO_BLOCK_CAUSE_BY_OPEN_MAIL_ACTIVITY);
+            }
         } catch (Exception e) {
             Log.e("Send db by gmail", e.getMessage());
             if (callback != null) {
