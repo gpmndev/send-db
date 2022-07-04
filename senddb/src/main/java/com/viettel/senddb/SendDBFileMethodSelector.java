@@ -75,9 +75,10 @@ public class SendDBFileMethodSelector {
                     if (context != null) {
                         notify = context.getString(R.string.BLOCK_SEND_DB);
                     }
-                    selectorCallback.onError(notify, new Exception("SEND DB: Out of submissions. Max: 3, submitted: " + numberOfTimesSendDB));
+                    selectorCallback.onError(notify, new Exception("SEND DB " + chosen.code + ": Out of submissions. Max: "
+                            + chosen.maxNumberOfTime + ", submitted: " + numberOfTimesSendDB));
                 } else {
-                    if(getSendDBFileMethodCallback != null) {
+                    if (getSendDBFileMethodCallback != null) {
                         selectorCallback.onChoose(decideSendDBMethod(chosen.code, getSendDBFileMethodCallback));
                     }
                 }
