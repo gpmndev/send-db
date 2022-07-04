@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class SendDBFileMethodAdapter extends BaseAdapter {
+class SendDBFileMethodAdapter extends BaseAdapter {
     private final List<SendDBFileMethod> methods;
     private final Context context;
 

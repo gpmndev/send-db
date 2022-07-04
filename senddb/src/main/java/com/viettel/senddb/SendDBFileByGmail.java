@@ -34,6 +34,7 @@ public class SendDBFileByGmail implements SendDBFile {
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         emailIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         final PackageManager pm = context.getPackageManager();
         final List<ResolveInfo> matches = pm.queryIntentActivities(emailIntent, 0);
         ResolveInfo best = null;
@@ -54,7 +55,7 @@ public class SendDBFileByGmail implements SendDBFile {
         } catch (Exception e) {
             Log.e("Send db by gmail", e.getMessage());
             if (callback != null) {
-                callback.onSendFailed(e);
+                callback.onSendFailed(null, e);
             }
         }
     }

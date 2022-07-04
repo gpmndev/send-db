@@ -1,7 +1,7 @@
 package com.viettel.senddb;
 
 public interface SendDBFileMethodSelectorCallback {
-    void onChoose(String method);
+    void onChoose(SendDBFile sendDBFile);
 
-    void onError(Exception exception);
+    void onError(String notify, Exception exception);
 }

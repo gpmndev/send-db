@@ -5,4 +5,8 @@
     <string name="SEND_DB_BY_FIREBASE">Hệ thống</string>
     <string name="PRE_SEND_DB_BY_GMAIL">Dữ liệu sẽ được gửi qua mail</string>
     <string name="PRE_SEND_DB_BY_FIREBASE">Dữ liệu đang được gửi qua hệ thống</string>
+    <string name="NOT_HAVE_ANY_SEND_DB_METHOD">Không tìm thấy bất kỳ cách thức gửi dữ liệu nào</string>
+    <string name="BLOCK_SEND_DB">Đã hết số lần gửi dữ liệu trong ngày</string>
+    <string name="CANCEL_SEND_DB">Đã huỷ gửi dữ liệu</string>
+    <string name="TEXT_DATA_SEND_SUCCESS">Gửi dữ liệu thành công</string>
 </resources>

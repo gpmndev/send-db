@@ -44,4 +44,8 @@ public class DBMetadata {
     public String toFilePath() {
         return appName + "/staffs/" + userId + "/" + fileName;
     }
+
+    public String toPath() {
+        return appName + "/staffs/" + userId + "/";
+    }
 }

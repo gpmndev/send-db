@@ -6,7 +6,6 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SendDBFileMethodSelector {
 
     private final Context context;
@@ -24,18 +23,20 @@ public class SendDBFileMethodSelector {
         }
     }
 
-    public SendDBFileMethodSelector setAvailableMethods(String[] sendDBMethodCodes) {
-        if(sendDBMethodCodes != null) {
+    public SendDBFileMethodSelector setAvailableMethods(SendDBFileMethod[] sendDBMethods) {
+        if (sendDBMethods != null) {
             methodList = new ArrayList<>();
-            for (String methodCode : sendDBMethodCodes) {
-                switch (methodCode) {
+            for (SendDBFileMethod method : sendDBMethods) {
+                switch (method.code) {
                     case SendDBFileMethod.GMAIL:
-                        String sendDBByGmail = getString(R.string.SEND_DB_BY_GMAIL);
-                        methodList.add(new SendDBFileMethod(methodCode, sendDBByGmail, R.drawable.ic_gmail));
+                        method.text = getString(R.string.SEND_DB_BY_GMAIL);
+                        method.iconId = R.drawable.ic_gmail;
+                        methodList.add(method);
                         break;
                     case SendDBFileMethod.FIREBASE:
-                        String sendDBByFirebase = getString(R.string.SEND_DB_BY_FIREBASE);
-                        methodList.add(new SendDBFileMethod(methodCode, sendDBByFirebase, R.drawable.ic_storage));
+                        method.text = getString(R.string.SEND_DB_BY_FIREBASE);
+                        method.iconId = R.drawable.ic_storage;
+                        methodList.add(method);
                         break;
                 }
             }
@@ -43,17 +44,21 @@ public class SendDBFileMethodSelector {
         return this;
     }
 
-    public void show(SendDBFileMethodSelectorCallback callback) {
+    public void show(SendDBFileMethodSelectorCallback selectorCallback, GetSendDBFileMethodCallback getSendDBFileMethodCallback) {
         if (methodList == null || methodList.isEmpty()) {
-            if (callback != null) {
-                callback.onError(new Exception("Not have any method, please check AP_PARAM table with AP_PARAM_CODE = 'SEND_DB_METHOD' or something else," +
+            if (selectorCallback != null) {
+                String notify = null;
+                if (context != null) {
+                    notify = context.getString(R.string.NOT_HAVE_ANY_SEND_DB_METHOD);
+                }
+                selectorCallback.onError(notify, new Exception("Not have any method, please check AP_PARAM table with AP_PARAM_CODE = 'SEND_DB_METHOD' or something else," +
                         " available methods: " + SendDBFileMethod.FIREBASE + ", " + SendDBFileMethod.GMAIL));
             }
             return;
         }
         if (methodList.size() == 1) {
-            if (callback != null) {
-                callback.onChoose(methodList.get(0).code);
+            if (selectorCallback != null && getSendDBFileMethodCallback != null) {
+                selectorCallback.onChoose(decideSendDBMethod(methodList.get(0).code, getSendDBFileMethodCallback));
             }
             return;
         }
@@ -61,12 +66,34 @@ public class SendDBFileMethodSelector {
         SendDBFileMethodAdapter adapter = new SendDBFileMethodAdapter(context, methodList);
         alertDialog.setTitle(getString(R.string.CHOOSE_SEND_DB_METHOD));
         alertDialog.setSingleChoiceItems(adapter, 0, (dialog, which) -> {
-            if (callback != null) {
+            if (selectorCallback != null) {
                 SendDBFileMethod chosen = methodList.get(which);
-                callback.onChoose(chosen.code);
+                final int numberOfTimesSendDB = SendDBCache.getNumberOfTimesSendDB(context, SendDBFileMethod.FIREBASE);
+                final boolean isOutOfSubmissions = numberOfTimesSendDB > chosen.maxNumberOfTime;
+                if (isOutOfSubmissions) {
+                    String notify = null;
+                    if (context != null) {
+                        notify = context.getString(R.string.BLOCK_SEND_DB);
+                    }
+                    selectorCallback.onError(notify, new Exception("SEND DB: Out of submissions. Max: 3, submitted: " + numberOfTimesSendDB));
+                } else {
+                    if(getSendDBFileMethodCallback != null) {
+                        selectorCallback.onChoose(decideSendDBMethod(chosen.code, getSendDBFileMethodCallback));
+                    }
+                }
             }
             dialog.dismiss();
         });
         alertDialog.show();
+    }
+
+    SendDBFile decideSendDBMethod(String methodCode, GetSendDBFileMethodCallback callback) {
+        if (callback != null) {
+            if (SendDBFileMethod.FIREBASE.equals(methodCode)) {
+                return callback.onGetSendDBFileByFirebase();
+            } else {
+                return callback.onGetSendDBFileByGmail();
+            }
+        } else return null;
     }
 }

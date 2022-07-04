@@ -5,7 +5,7 @@ public interface SendDBFileCallback {
 
     void onProgress(long uploadedBytes, long totalBytes);
 
-    void onSendSuccessfully(Object... args);
+    void onSendSuccessful(String notify, Object... args);
 
-    void onSendFailed(Exception exception);
+    void onSendFailed(String notify, Exception exception);
 }
