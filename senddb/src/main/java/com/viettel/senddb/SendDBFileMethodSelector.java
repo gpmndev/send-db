@@ -68,7 +68,7 @@ public class SendDBFileMethodSelector {
         alertDialog.setSingleChoiceItems(adapter, 0, (dialog, which) -> {
             if (selectorCallback != null) {
                 SendDBFileMethod chosen = methodList.get(which);
-                final int numberOfTimesSendDB = SendDBCache.getNumberOfTimesSendDB(context, SendDBFileMethod.FIREBASE);
+                final int numberOfTimesSendDB = SendDBCache.getNumberOfTimesSendDB(context, chosen.code);
                 final boolean isOutOfSubmissions = numberOfTimesSendDB > chosen.maxNumberOfTime;
                 if (isOutOfSubmissions) {
                     String notify = null;
