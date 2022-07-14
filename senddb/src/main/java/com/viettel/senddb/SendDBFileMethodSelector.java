@@ -44,7 +44,7 @@ public class SendDBFileMethodSelector {
         return this;
     }
 
-    public void show(SendDBFileMethodSelectorCallback selectorCallback, GetSendDBFileMethodCallback getSendDBFileMethodCallback) {
+    public void show(SendDBFileMethodSelectorCallback selectorCallback, GetSendDBFileMethodCallback getSendDBFileMethodCallback, boolean cancelable) {
         if (methodList == null || methodList.isEmpty()) {
             if (selectorCallback != null) {
                 String notify = null;
@@ -65,6 +65,7 @@ public class SendDBFileMethodSelector {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         SendDBFileMethodAdapter adapter = new SendDBFileMethodAdapter(context, methodList);
         alertDialog.setTitle(getString(R.string.CHOOSE_SEND_DB_METHOD));
+        alertDialog.setCancelable(cancelable);
         alertDialog.setSingleChoiceItems(adapter, 0, (dialog, which) -> {
             if (selectorCallback != null) {
                 SendDBFileMethod chosen = methodList.get(which);
