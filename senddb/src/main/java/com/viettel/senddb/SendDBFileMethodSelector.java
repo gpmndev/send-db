@@ -44,7 +44,7 @@ public class SendDBFileMethodSelector {
         return this;
     }
 
-    public void show(SendDBFileMethodSelectorCallback selectorCallback, GetSendDBFileMethodCallback getSendDBFileMethodCallback, boolean cancelable) {
+    public AlertDialog show(SendDBFileMethodSelectorCallback selectorCallback, GetSendDBFileMethodCallback getSendDBFileMethodCallback, boolean cancelable) {
         if (methodList == null || methodList.isEmpty()) {
             if (selectorCallback != null) {
                 String notify = null;
@@ -54,13 +54,13 @@ public class SendDBFileMethodSelector {
                 selectorCallback.onError(notify, new Exception("Not have any method, please check AP_PARAM table with AP_PARAM_CODE = 'SEND_DB_METHOD' or something else," +
                         " available methods: " + SendDBFileMethod.FIREBASE + ", " + SendDBFileMethod.GMAIL));
             }
-            return;
+            return null;
         }
         if (methodList.size() == 1) {
             if (selectorCallback != null && getSendDBFileMethodCallback != null) {
                 selectorCallback.onChoose(decideSendDBMethod(methodList.get(0).code, getSendDBFileMethodCallback));
             }
-            return;
+            return null;
         }
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         SendDBFileMethodAdapter adapter = new SendDBFileMethodAdapter(context, methodList);
@@ -86,7 +86,7 @@ public class SendDBFileMethodSelector {
             }
             dialog.dismiss();
         });
-        alertDialog.show();
+        return alertDialog.show();
     }
 
     SendDBFile decideSendDBMethod(String methodCode, GetSendDBFileMethodCallback callback) {
